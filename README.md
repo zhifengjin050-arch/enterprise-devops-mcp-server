@@ -1,80 +1,82 @@
 # Enterprise DevOps MCP Server
 
-**Enterprise-grade AI DevOps automation server based on Model Context Protocol (MCP).**
+**中文** | [English](README_EN.md)
 
-Enable AI Agents (Cursor / Claude Desktop / custom clients) to safely operate infrastructure:
+基于 **MCP（Model Context Protocol）** 的企业级 AI DevOps 运维自动化服务。
 
-- Linux server inspection
-- Docker container management
-- SSH remote automation
-- Kubernetes status queries
-- Log analysis workflows
-- Audit-ready security controls
+让 AI Agent（Cursor / Claude Desktop / 自研客户端）可以**安全调用**企业运维能力：
 
-> Suitable for: **open-source showcase** · **portfolio / interview demo** · **AI Ops experiments**
+- Linux 服务器巡检
+- Docker 容器管理
+- SSH 远程执行
+- Kubernetes 状态查询
+- 日志分析工作流
+- 可审计的安全控制
 
----
-
-## Why this project?
-
-Most AI coding assistants can *suggest* shell commands.  
-This project lets an AI Agent **call governed DevOps tools** with:
-
-1. **Read / Execute separation**
-2. **Dangerous command filtering**
-3. **Rate limiting & confirmation**
-4. **Built-in audit trail**
-
-One MCP Server can manage **local Docker** and **remote servers** under the same policy and the same audit log.
+> 适合：**开源作品展示** · **简历 / 面试 Demo** · **AI Ops 实验**
 
 ---
 
-## Core Capabilities
+## 为什么做这个项目？
 
-### Server Monitoring
+多数 AI 编程助手只会**建议**你敲命令。  
+本项目让 AI Agent 在受控规则下**真正调用运维工具**：
 
-| Tool | Description |
-|------|-------------|
-| `get_server_health` | CPU / memory / disk / uptime / health grade |
-| `get_system_info` | hostname / OS / platform / Python / uptime |
-| `get_cpu_usage` | CPU percent + core count |
-| `get_memory_usage` | total / used / available / percent |
-| `get_disk_usage` | per-mount usage |
-| `list_processes` | Top N processes by CPU |
-| `get_audit_logs` | query recent tool calls + stats |
+1. **读写分离**（READ / EXECUTE）
+2. **危险命令过滤**
+3. **速率限制与高危确认**
+4. **内置审计日志**
 
-### Docker Management
+一个 MCP Server 可同时管理**本机 Docker** 与**远程服务器**，策略统一、审计统一。
 
-| Tool | Access |
-|------|--------|
-| `docker_list` | READ |
-| `docker_logs` | READ |
-| `docker_restart` | EXECUTE |
+---
+
+## 核心能力
+
+### 服务器监控
+
+| Tool | 说明 |
+|------|------|
+| `get_server_health` | CPU / 内存 / 磁盘 / 运行时长 / 健康等级 |
+| `get_system_info` | 主机名 / OS / 平台 / Python / 运行时长 |
+| `get_cpu_usage` | CPU 使用率 + 核心数 |
+| `get_memory_usage` | 总量 / 已用 / 可用 / 百分比 |
+| `get_disk_usage` | 各分区用量 |
+| `list_processes` | 按 CPU Top N 进程 |
+| `get_audit_logs` | 查询最近调用记录与统计 |
+
+### Docker 管理
+
+| Tool | 权限 |
+|------|------|
+| `docker_list` | 只读 |
+| `docker_logs` | 只读 |
+| `docker_restart` | 执行 |
 
 ### Kubernetes
 
-| Tool | Access |
-|------|--------|
-| `k8s_get_pods` | READ |
-| `k8s_get_deployments` | READ |
-| `k8s_get_services` | READ |
-| `k8s_logs` | READ |
+| Tool | 权限 |
+|------|------|
+| `k8s_get_pods` | 只读 |
+| `k8s_get_deployments` | 只读 |
+| `k8s_get_services` | 只读 |
+| `k8s_logs` | 只读 |
 
-### SSH Automation
+### SSH 自动化
 
-| Tool | Access |
-|------|--------|
-| `ssh_check_connection` | READ |
-| `ssh_execute_command` | EXECUTE |
-| `ssh_upload_file` | EXECUTE |
+| Tool | 权限 |
+|------|------|
+| `ssh_check_connection` | 只读 |
+| `ssh_execute_command` | 执行 |
+| `ssh_upload_file` | 执行 |
 
-### Security Control
+### 安全控制
 
-- **Execute Permission Manager** — write tools disabled by default
-- **Dangerous Command Filter** — blocks `rm -rf /`, `mkfs`, `shutdown`, ...
-- **Audit mechanism** — every call recorded in memory ring buffer
+- **执行权限管理**：写操作默认关闭
+- **危险命令过滤**：拦截 `rm -rf /`、`mkfs`、`shutdown` 等
+- **审计机制**：每次调用写入内存环形缓冲区
 
-Example: AI tries `rm -rf /` via SSH → blocked before remote execution:
+示例：AI 尝试通过 SSH 执行 `rm -rf /` → 在真正连远程前被拦截：
 
 ```json
 {
@@ -86,10 +88,10 @@ Example: AI tries `rm -rf /` via SSH → blocked before remote execution:
 
 ---
 
-## Architecture
+## 架构
 
 ```
-Cursor / Claude / ChatGPT Client
+Cursor / Claude / ChatGPT 客户端
               |
          MCP Client
               |
@@ -98,26 +100,27 @@ Cursor / Claude / ChatGPT Client
    ---------------------------
    |           |             |
  System     Docker        SSH/K8s
- (local)    (local)       (remote)
+ （本机）    （本机）       （远程）
 ```
 
-See [docs/architecture.md](docs/architecture.md) and [docs/security.md](docs/security.md).
+详见：[架构说明](docs/architecture.md) · [安全设计](docs/security.md)  
+English docs: [Architecture](docs/architecture.en.md) · [Security](docs/security.en.md)
 
 ---
 
-## Requirements
+## 环境要求
 
 - Python **3.11+**
-- Docker Desktop / Engine (for Docker tools)
-- Optional: kubeconfig (Kubernetes tools)
-- Optional: SSH reachability to remote hosts
+- Docker Desktop / Engine（Docker 工具需要）
+- 可选：kubeconfig（Kubernetes 工具）
+- 可选：可 SSH 连通的远程主机
 
 ---
 
-## Installation
+## 安装
 
 ```bash
-git clone https://github.com/YOUR_ORG/enterprise-devops-mcp-server.git
+git clone https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server.git
 cd enterprise-devops-mcp-server
 
 python -m venv .venv
@@ -130,25 +133,25 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Edit `.env` for your environment. **Never commit `.env`.**
+按需修改 `.env`。**切勿把 `.env` 提交到 Git。**
 
 ---
 
-## Quick Start
+## 快速开始
 
-### 1. Start MCP Server (stdio)
+### 1. 启动 MCP Server（stdio）
 
 ```bash
 python -m app.server
-# or
+# 或
 python scripts/run_devops_mcp.py
 ```
 
-### 2. Configure Cursor MCP
+### 2. 配置 Cursor MCP
 
-Copy [examples/mcp_config_example.json](examples/mcp_config_example.json) into your Cursor MCP settings.
+将 [examples/mcp_config_example.json](examples/mcp_config_example.json) 复制到 Cursor 的 MCP 配置中。
 
-Minimal example:
+最小示例：
 
 ```json
 {
@@ -166,74 +169,75 @@ Minimal example:
 }
 ```
 
-> Set `cwd` to your local clone path. Do not hard-code private machine paths in public docs.
+> 把 `cwd` 改成你本机仓库的绝对路径，不要在公开文档里写私人路径。
 
-### 3. Talk to the Agent
+### 3. 与 AI 对话体验
 
-Examples:
+示例：
 
-- `Check current server health`
-- `List running Docker containers`
-- `Show recent logs for container test-nginx`
-- `Try to run rm -rf / on the remote host` → should be **blocked**
+- `查看当前服务器健康状态`
+- `列出正在运行的 Docker 容器`
+- `查看 test-nginx 最近日志`
+- `在远程主机执行 rm -rf /` → 应被**安全拦截**
 
 ---
 
-## Security Design (must read)
+## 安全设计（必读）
 
-Default:
+默认配置：
 
 ```env
 EXECUTE_TOOLS_ENABLED=false
 ```
 
-| Mode | What AI can do |
-|------|----------------|
-| Default | Inspect only |
-| `EXECUTE_TOOLS_ENABLED=true` | Restart containers / SSH execute / upload |
-| `EXECUTE_PROTECTION_LEVEL=strict` | Rate limit + confirmation |
+| 模式 | AI 能做什么 |
+|------|-------------|
+| 默认 | 仅巡检 / 查看 |
+| `EXECUTE_TOOLS_ENABLED=true` | 可重启容器 / SSH 执行 / 上传 |
+| `EXECUTE_PROTECTION_LEVEL=strict` | 速率限制 + 高危确认 |
 
-Production recommendation:
+生产建议：
 
-1. Keep execute **off** until needed
-2. Prefer SSH keys over passwords
-3. Never put production secrets in git
-4. Review `get_audit_logs` after operations
+1. 非必要不要打开执行权限
+2. 优先使用 SSH 密钥，而不是密码
+3. 切勿把生产密钥提交到 Git
+4. 操作后用 `get_audit_logs` 复查
 
-Full details: [docs/security.md](docs/security.md)
-
----
-
-## Screenshots
-
-| # | Scenario |
-|---|----------|
-| 01 | MCP connection & tool discovery |
-| 02 | AI server health inspection |
-| 03 | Docker container inspection |
-| 04 | MySQL log analysis via Docker logs |
-| 05 | SSH dangerous command filter |
-| 06 | Disk cleanup automation flow |
-
-![01 MCP connection](docs/screenshots/01-mcp-connection-tools.png)
-
-![02 Health check](docs/screenshots/02-server-health-check.png)
-
-![03 Docker inspection](docs/screenshots/03-docker-inspection.png)
-
-![04 MySQL log analysis](docs/screenshots/04-mysql-log-analysis.png)
-
-![05 SSH danger filter](docs/screenshots/05-ssh-dangerous-command-filter.png)
-
-![06 Disk cleanup](docs/screenshots/06-disk-cleanup-automation.png)
+完整说明：[docs/security.md](docs/security.md)
 
 ---
 
-## Project Structure
+## 截图
+
+| # | 场景 |
+|---|------|
+| 01 | MCP 连接与 Tool 发现 |
+| 02 | AI 服务器健康巡检 |
+| 03 | Docker 容器巡检 |
+| 04 | MySQL 日志分析 |
+| 05 | SSH 危险命令安全过滤 |
+| 06 | 磁盘清理自动化 |
+
+![01 MCP 连接](docs/screenshots/01-mcp-connection-tools.png)
+
+![02 健康巡检](docs/screenshots/02-server-health-check.png)
+
+![03 Docker 巡检](docs/screenshots/03-docker-inspection.png)
+
+![04 MySQL 日志](docs/screenshots/04-mysql-log-analysis.png)
+
+![05 SSH 拦截](docs/screenshots/05-ssh-dangerous-command-filter.png)
+
+![06 磁盘清理](docs/screenshots/06-disk-cleanup-automation.png)
+
+---
+
+## 项目结构
 
 ```
 enterprise-devops-mcp-server/
-├── README.md
+├── README.md              # 中文（默认）
+├── README_EN.md           # English
 ├── LICENSE
 ├── requirements.txt
 ├── Dockerfile
@@ -241,40 +245,21 @@ enterprise-devops-mcp-server/
 ├── .env.example
 ├── .gitignore
 ├── app/
-│   ├── server.py
-│   ├── config.py
-│   ├── tools/
-│   │   ├── system.py
-│   │   ├── docker.py
-│   │   ├── kubernetes.py
-│   │   └── ssh.py
-│   └── security/
-│       ├── permission.py
-│       ├── execute_protection.py
-│       └── audit.py
 ├── docs/
-│   ├── architecture.md
-│   ├── security.md
-│   ├── demo.md
-│   └── screenshots/
 ├── examples/
-│   └── mcp_config_example.json
 ├── scripts/
-│   └── run_devops_mcp.py
 └── tests/
 ```
 
 ---
 
-## Testing
+## 测试
 
 ```bash
 python -m pytest tests/ -v
 ```
 
-Expected: **225+** tests passed.
-
-Docker test profile:
+预期：**225+** 测试通过。
 
 ```bash
 docker compose --profile test run --rm mcp-server-test
@@ -282,35 +267,35 @@ docker compose --profile test run --rm mcp-server-test
 
 ---
 
-## Environment Variables (summary)
+## 环境变量摘要
 
-| Variable | Default | Meaning |
-|----------|---------|---------|
-| `ENABLE_SECURITY` | `true` | master security switch |
-| `EXECUTE_TOOLS_ENABLED` | `false` | allow write/execute tools |
-| `ALLOWED_TOOLS` | `system,docker,kubernetes,ssh` | module whitelist |
+| 变量 | 默认值 | 含义 |
+|------|--------|------|
+| `ENABLE_SECURITY` | `true` | 安全总开关 |
+| `EXECUTE_TOOLS_ENABLED` | `false` | 是否允许执行类工具 |
+| `ALLOWED_TOOLS` | `system,docker,kubernetes,ssh` | 模块白名单 |
 | `EXECUTE_PROTECTION_LEVEL` | `basic` | `off` / `basic` / `strict` |
-| `AUDIT_LOG_ENABLED` | `true` | enable audit buffer |
-| `SSH_SERVERS` | empty | optional multi-host registry (no passwords) |
+| `AUDIT_LOG_ENABLED` | `true` | 是否启用审计 |
+| `SSH_SERVERS` | 空 | 多主机注册（不要存密码） |
 
 ---
 
-## Roadmap
+## 路线图
 
-| Version | Focus |
-|---------|-------|
-| **V1.0** | Local MCP + System/Docker/K8s/SSH + security + tests |
-| **V1.1** | HTTP/SSE transport + auth + RBAC (enterprise remote access) |
-| Later | Audit export, multi-tenant policy packs |
+| 版本 | 重点 |
+|------|------|
+| **V1.0** | 本地 MCP + System/Docker/K8s/SSH + 安全 + 测试 |
+| **V1.1** | HTTP/SSE 传输 + 身份认证 + RBAC |
+| 后续 | 审计导出、多租户策略包 |
 
 ---
 
-## Contributing
+## 贡献
 
-1. Fork & create a feature branch
-2. Keep security defaults conservative
-3. Add/adjust tests
-4. Do not commit `.env`, keys, or real infrastructure identifiers
+1. Fork 并创建功能分支
+2. 保持安全默认值保守
+3. 补充 / 调整测试
+4. 不要提交 `.env`、密钥或真实基础设施标识
 
 ---
 
@@ -320,8 +305,8 @@ docker compose --profile test run --rm mcp-server-test
 
 ---
 
-## Disclaimer
+## 免责声明
 
-This software can control servers and containers when execute mode is enabled.  
-Use at your own risk. Always test in non-production first.  
-Authors are not responsible for misuse or operational damage.
+开启执行权限后，本软件可控制服务器与容器。  
+请自行承担风险，务必先在非生产环境验证。  
+作者不对滥用或误操作造成的损失负责。

@@ -1,8 +1,10 @@
-# Security Design
+# 安全设计
 
-Enterprise DevOps MCP Server is built for **AI Agent access under human-controlled guardrails**.
+[中文](security.md) | [English](security.en.md)
 
-## Default Safe Mode
+Enterprise DevOps MCP Server 面向「**人类可控护栏下的 AI Agent 访问**」而设计。
+
+## 默认安全模式
 
 ```env
 ENABLE_SECURITY=true
@@ -10,45 +12,44 @@ EXECUTE_TOOLS_ENABLED=false
 EXECUTE_PROTECTION_LEVEL=basic
 ```
 
-With these defaults:
+在此默认下：
 
-- AI can inspect (health, docker list/logs, k8s status, SSH connectivity)
-- AI **cannot** restart containers or run remote commands
-- Rate limits apply when execute mode is later enabled
+- AI 可以巡检（健康、Docker 列表/日志、K8s 状态、SSH 连通性）
+- AI **不能**重启容器或执行远程命令
+- 后续开启执行模式时，仍会生效速率限制
 
-## Three Security Layers
+## 三层安全体系
 
-### 1. Permission Control
+### 1. 权限控制
 
-- Module whitelist: `system`, `docker`, `kubernetes`, `ssh`
-- Operation classification: `READ` vs `EXECUTE`
-- Structured deny reasons for agents and humans
+- 模块白名单：`system`、`docker`、`kubernetes`、`ssh`
+- 操作分类：`READ` vs `EXECUTE`
+- 结构化拒绝原因，便于 Agent 与人工理解
 
-### 2. Execute Protection
+### 2. 执行保护
 
-| Level | Behavior |
-|-------|----------|
-| `off` | Permission checks only |
-| `basic` | Rate limit (default 10 calls/min) |
-| `strict` | Rate limit + high-risk confirmation |
+| 等级 | 行为 |
+|------|------|
+| `off` | 仅权限校验 |
+| `basic` | 速率限制（默认 10 次/分钟） |
+| `strict` | 速率限制 + 高危确认 |
 
-### 3. Audit Logging
+### 3. 审计日志
 
-Every tool call records:
+每次 Tool 调用记录：
 
-- timestamp
-- tool name
-- arguments (sensitive keys redacted in permission layer)
-- permission result
-- execution status
-- duration
+- 时间戳
+- 工具名
+- 参数（权限层会对敏感字段脱敏）
+- 权限结果
+- 执行状态
+- 耗时
 
-Query via MCP tool: `get_audit_logs`
+可通过 MCP Tool 查询：`get_audit_logs`
 
-## Dangerous Command Filter (SSH)
+## 危险命令过滤（SSH）
 
-Even when execute mode is enabled, commands matching the blacklist are blocked
-**before** any SSH session is opened. Examples:
+即使开启了执行模式，命中黑名单的命令也会在**建立任何 SSH 会话之前**被拦截。例如：
 
 ```
 rm -rf /
@@ -60,7 +61,7 @@ reboot
 chmod -R 777 /
 ```
 
-Example response:
+示例返回：
 
 ```json
 {
@@ -70,19 +71,19 @@ Example response:
 }
 ```
 
-## Credential Handling
+## 凭证处理
 
-| Do | Don't |
-|----|-------|
-| Use SSH keys | Put production passwords in `.env` |
-| Use `YOUR_SERVER_IP` placeholders in docs | Commit real cloud IPs |
-| Pass password only at call-time if unavoidable | Commit API tokens / private keys |
-| Keep `.env` local (gitignored) | Share screenshots with real host fields |
+| 建议 | 禁止 |
+|------|------|
+| 使用 SSH 密钥 | 把生产密码写进 `.env` |
+| 文档使用 `YOUR_SERVER_IP` 占位 | 提交真实云服务器 IP |
+| 必要时仅在调用时传入密码 | 提交 API Token / 私钥 |
+| `.env` 仅本地保存（已 gitignore） | 截图中暴露真实主机信息 |
 
-## Production Checklist
+## 生产检查清单
 
-- [ ] `EXECUTE_TOOLS_ENABLED=false` until needed
-- [ ] Prefer `strict` protection for production execute mode
-- [ ] Rotate any credentials that ever appeared in chat/screenshots
-- [ ] Restrict SSH user privileges on remote hosts
-- [ ] Review `get_audit_logs` regularly
+- [ ] 非必要保持 `EXECUTE_TOOLS_ENABLED=false`
+- [ ] 生产执行模式优先使用 `strict`
+- [ ] 轮换曾出现在聊天/截图中的任何凭证
+- [ ] 限制远程主机上的 SSH 用户权限
+- [ ] 定期查看 `get_audit_logs`
