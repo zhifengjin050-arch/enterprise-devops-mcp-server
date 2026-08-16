@@ -2,6 +2,8 @@
 
 感谢你对 **Enterprise DevOps MCP Server** 的关注。欢迎提交 Issue 与 Pull Request。
 
+当前发布基线：**v1.0.1** · **225 tests passed** · **17 MCP Tools** · Enterprise Security Architecture。
+
 ---
 
 ## 开发环境

@@ -1,44 +1,43 @@
 # Enterprise DevOps MCP Server v1.0.1
 
+**Release:** https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/releases/tag/v1.0.1
+
+## Positioning
+
+Enterprise AI DevOps MCP Server.
+
+```
+AI Agent → MCP Server → Security Layer → Infrastructure
+```
+
 ## Highlights
 
-- MCP-based AI DevOps automation for Cursor / Claude / custom Agents
-- Infrastructure monitoring（Linux / Docker / Kubernetes / SSH）
-- Secure execution model with enterprise controls
-- Enterprise security defaults（execute off by default）
+- **225 tests passed**
+- **17 MCP Tools**
+- Linux monitoring
+- Docker management
+- Kubernetes support
+- SSH remote management
+- Permission Control
+- Execute Protection
+- Audit Logging
+- Docker deployment
+- GitHub Actions CI
 
-## Capabilities
+## Enterprise Security Architecture
 
-| Area | Status |
-|------|--------|
-| System Monitoring | Included |
-| Docker Management | Included |
-| Kubernetes Monitoring | Included |
-| SSH Remote Operations | Included |
-| Permission Control | Included |
-| Execute Protection | Included |
-| Audit Logging | Included |
-| Docker Deployment | Included |
+- Read-only / Execute permission separation
+- Dangerous command filtering
+- Audit logging
+- `EXECUTE_TOOLS_ENABLED=false` by default
 
 ## Testing
 
-**225 passed**
-
-## Deployment
-
-- Local: `python -m app.server`
-- Docker: `docker compose up -d --build`
-- CI: GitHub Actions on `push` / `pull_request`
-
-## Security Notes
-
-- Default: `EXECUTE_TOOLS_ENABLED=false`
-- Dangerous commands（e.g. `rm -rf /`）are blocked before remote execution
-- Do not commit `.env`, keys, tokens, or real infrastructure identifiers
+**225 tests passed**
 
 ## Links
 
 - [Changelog](CHANGELOG.md)
-- [Security Architecture](docs/security.md)
+- [Security](docs/security.md)
 - [Architecture](docs/architecture.md)
 - [Contributing](CONTRIBUTING.md)

@@ -4,20 +4,24 @@ All notable changes to this project are documented in this file.
 
 ---
 
-## v1.0.1
+## [v1.0.1](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/releases/tag/v1.0.1) — 2026-08-17
 
 ### Added
 
-- MCP Server（FastMCP / stdio）
-- System tools（monitoring, health, processes, audit query）
-- Docker tools（list, logs, restart）
-- Kubernetes tools（pods, deployments, services, logs）
-- SSH tools（connection check, remote command, secure upload）
-- Security framework（Permission Control, Execute Protection, Command Filter）
-- Audit logging
-- Docker deployment（multi-stage image + Compose）
-- Open-source docs（README, architecture, security, screenshots）
-- GitHub Actions pytest workflow
+- Enterprise AI DevOps **MCP Server** (FastMCP / stdio)
+- **17 MCP Tools**
+  - System: monitoring, health, processes, audit query
+  - Docker: list, logs, restart
+  - Kubernetes: pods, deployments, services, logs
+  - SSH: connection check, remote command, secure upload
+- **Enterprise Security Architecture**
+  - Permission Control (`READ_ONLY` / `EXECUTE`)
+  - Execute Protection (`OFF` / `BASIC` / `STRICT`)
+  - Dangerous Command Filter
+  - Audit Logging
+- Docker multi-stage image + Compose
+- GitHub Actions CI (`pytest` on push / pull_request)
+- Bilingual docs, screenshots, contributing guide
 
 ### Testing
 
@@ -26,4 +30,4 @@ All notable changes to this project are documented in this file.
 ### Security defaults
 
 - `EXECUTE_TOOLS_ENABLED=false`
-- Dangerous command blocked before remote execution（e.g. `rm -rf /`）
+- Example: `rm -rf /` blocked before remote execution
