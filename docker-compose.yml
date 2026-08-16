@@ -1,0 +1,63 @@
+# ------------------------------------------------------------
+# Enterprise DevOps MCP Server - Docker Compose
+# ------------------------------------------------------------
+# 支持两种运行模式：
+#   1. 标准模式：docker compose up -d
+#   2. 测试模式：docker compose run --rm mcp-server-test
+# ------------------------------------------------------------
+
+
+services:
+  # ---- 标准 MCP Server 服务 ----
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: enterprise-devops-mcp-server
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - MCP_SERVER_NAME=Enterprise DevOps MCP Server
+      - LOG_LEVEL=INFO
+    volumes:
+      # Docker socket 挂载（访问宿主机 Docker 引擎）
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Kubeconfig 挂载（按需配置）
+      # - ~/.kube/config:/root/.kube/config:ro
+      # SSH 密钥挂载
+      # - ~/.ssh:/root/.ssh:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - devops-network
+
+  # ---- 测试服务（用于 CI/CD） ----
+  mcp-server-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    container_name: enterprise-devops-mcp-server-test
+    environment:
+      - ENABLE_SECURITY=true
+      - EXECUTE_TOOLS_ENABLED=false
+      - LOG_LEVEL=INFO
+      - ALLOWED_TOOLS=system,docker,kubernetes,ssh
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    profiles:
+      - test
+    # 运行测试后退出
+    command: ["python", "-m", "pytest", "tests/", "-v"]
+
+networks:
+  devops-network:
+    driver: bridge

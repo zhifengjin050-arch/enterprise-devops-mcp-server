@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "enterprise-devops": {
+      "command": "python",
+      "args": [
+        "scripts/run_devops_mcp.py"
+      ],
+      "cwd": "/absolute/path/to/enterprise-devops-mcp-server",
+      "env": {
+        "FASTMCP_SHOW_SERVER_BANNER": "false",
+        "PYTHONUNBUFFERED": "1",
+        "ENABLE_SECURITY": "true",
+        "EXECUTE_TOOLS_ENABLED": "false",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
