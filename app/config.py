@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     # ---- 基础信息 ----
     mcp_server_name: str = "Enterprise DevOps MCP Server"
-    mcp_server_version: str = "0.1.0"
+    mcp_server_version: str = "1.0.1"
 
     # ---- API / 安全 ----
     api_key: str = ""
@@ -56,8 +56,7 @@ class Settings(BaseSettings):
     """
     多服务器配置（JSON 格式字符串）。
     示例:
-    [{"name":"server01","host":"192.168.1.1","port":22,"username":"admin"},
-     {"name":"server02","host":"192.168.1.2","port":22,"username":"admin"}]
+    [{"name":"example-server","host":"YOUR_SERVER_IP","port":22,"username":"YOUR_USERNAME"}]
     注意：不要在此保存密码明文，SSH 认证建议使用密钥。
     """
 

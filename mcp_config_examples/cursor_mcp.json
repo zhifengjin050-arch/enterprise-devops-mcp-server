@@ -1,12 +1,12 @@
 {
   "mcpServers": {
     "enterprise-devops": {
-      "description": "Enterprise DevOps MCP Server",
+      "description": "Enterprise DevOps MCP Server — replace YOUR_PROJECT_PATH with your local absolute path. Do NOT commit real paths, IPs, usernames, or secrets.",
       "command": "python",
       "args": [
         "scripts/run_devops_mcp.py"
       ],
-      "cwd": "/absolute/path/to/enterprise-devops-mcp-server",
+      "cwd": "YOUR_PROJECT_PATH",
       "env": {
         "FASTMCP_SHOW_SERVER_BANNER": "false",
         "ENABLE_SECURITY": "true",

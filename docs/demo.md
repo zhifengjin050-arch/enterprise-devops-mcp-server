@@ -161,7 +161,7 @@
 {
   "tool": "ssh_execute_command",
   "arguments": {
-    "host": "192.168.1.102",
+    "host": "YOUR_SERVER_IP",
     "username": "admin",
     "command": "systemctl status mysql"
   }
@@ -192,7 +192,7 @@
 {
   "tool": "ssh_execute_command",
   "arguments": {
-    "host": "192.168.1.102",
+    "host": "YOUR_SERVER_IP",
     "username": "admin",
     "command": "systemctl start mysql"
   }

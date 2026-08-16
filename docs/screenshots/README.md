@@ -1,14 +1,44 @@
 # Screenshots
 
-Public acceptance screenshots for README and documentation.
+Public, sanitized acceptance screenshots for the GitHub README.
 
-| File | Description |
-|------|-------------|
-| `01-mcp-connection-tools.png` | MCP connected + tool discovery |
-| `02-server-health-check.png` | Server health inspection |
-| `03-docker-inspection.png` | Docker container inspection |
-| `04-mysql-log-analysis.png` | MySQL log analysis via Docker logs |
-| `05-ssh-dangerous-command-filter.png` | Dangerous SSH command blocked |
-| `06-disk-cleanup-automation.png` | Disk cleanup automation flow |
+## Screenshots Index
 
-Screenshots `05` and `06` are sanitized public versions (no real IPs/credentials/local paths).
+1. **MCP Server Connection** — `01-mcp-connection-tools.png`
+2. **AI Infrastructure Health Check** — `02-server-health-check.png`
+3. **Docker Container Inspection** — `03-docker-inspection.png`
+4. **MySQL Log Analysis** — `04-mysql-log-analysis.png`
+5. **SSH Security Filter** — `05-ssh-dangerous-command-filter.png`
+6. **Disk Cleanup Automation** — `06-disk-cleanup-automation.png`
+
+## Preview
+
+### 1. MCP Server Connection
+
+![MCP Server Connection](01-mcp-connection-tools.png)
+
+### 2. AI Infrastructure Health Check
+
+![AI Infrastructure Health Check](02-server-health-check.png)
+
+### 3. Docker Container Inspection
+
+![Docker Container Inspection](03-docker-inspection.png)
+
+### 4. MySQL Log Analysis
+
+![MySQL Log Analysis](04-mysql-log-analysis.png)
+
+### 5. SSH Security Filter
+
+![SSH Security Filter](05-ssh-dangerous-command-filter.png)
+
+### 6. Disk Cleanup Automation
+
+![Disk Cleanup Automation](06-disk-cleanup-automation.png)
+
+## Notes
+
+- Files under `验收截图/` are **gitignored** (may contain real hosts).
+- Public images must not include real passwords, API keys, tokens, or private keys.
+- Prefer placeholders: `YOUR_SERVER_IP`, `YOUR_USERNAME`.

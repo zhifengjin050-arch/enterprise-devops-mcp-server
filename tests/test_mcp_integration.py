@@ -20,7 +20,7 @@ def server() -> FastMCP:
     """创建全新的 FastMCP 实例并注册所有 Tool（避免全局实例重复注册）。"""
     mcp = FastMCP(
         name="Enterprise DevOps MCP Server",
-        version="0.1.0",
+        version="1.0.1",
     )
     from app.tools import register_all_tools
     register_all_tools(mcp)
@@ -34,7 +34,7 @@ class TestServerInitialization:
         """验证 Server 初始化成功。"""
         assert server is not None
         assert server.name == "Enterprise DevOps MCP Server"
-        assert server.version == "0.1.0"
+        assert server.version == "1.0.1"
 
     def test_server_has_run_method(self, server: FastMCP) -> None:
         """验证 Server 支持 run 方法（stdio transport 就绪）。"""
@@ -202,15 +202,21 @@ class TestToolExecution:
 class TestPermissionIntegration:
     """权限与注册一致性测试。"""
 
-    def test_security_enabled_by_default(self) -> None:
-        """验证安全模式默认启用。"""
-        from app.config import settings
-        assert settings.enable_security is True
+    def test_security_enabled_by_default(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """验证代码默认值：安全模式默认启用（不受本地 .env 干扰）。"""
+        monkeypatch.delenv("ENABLE_SECURITY", raising=False)
+        from app.config import Settings
 
-    def test_execute_disabled_by_default(self) -> None:
-        """验证执行操作默认关闭。"""
-        from app.config import settings
-        assert settings.execute_tools_enabled is False
+        defaults = Settings(_env_file=None)
+        assert defaults.enable_security is True
+
+    def test_execute_disabled_by_default(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """验证代码默认值：执行操作默认关闭（不受本地 .env 干扰）。"""
+        monkeypatch.delenv("EXECUTE_TOOLS_ENABLED", raising=False)
+        from app.config import Settings
+
+        defaults = Settings(_env_file=None)
+        assert defaults.execute_tools_enabled is False
 
     @pytest.mark.asyncio
     async def test_tool_permission_returns_error_struct(self, server: FastMCP) -> None:

@@ -1,10 +1,51 @@
-# 安全设计
+# Enterprise Security Architecture
 
 [中文](security.md) | [English](security.en.md)
 
-Enterprise DevOps MCP Server 面向「**人类可控护栏下的 AI Agent 访问**」而设计。
+> AI Agent 直接操作服务器存在风险。  
+> 本项目通过 **Permission + Execute Protection + Command Filter + Audit**  
+> 构建可治理的企业级访问路径。
 
-## 默认安全模式
+---
+
+## Security Principles
+
+### 1. Least Privilege（最小权限）
+
+默认：
+
+```env
+EXECUTE_TOOLS_ENABLED=false
+```
+
+含义：AI 可以巡检与查看；**不能**重启容器或执行远程变更，除非管理员显式开启。
+
+### 2. Defense in Depth（纵深防御）
+
+三层防护：
+
+| Layer | 组件 | 作用 |
+|-------|------|------|
+| **Layer 1** | Permission | 模块白名单 + `READ_ONLY` / `EXECUTE` |
+| **Layer 2** | Execute Protection | `OFF` / `BASIC` / `STRICT`（速率限制 / 确认） |
+| **Layer 3** | Command Filter | SSH 危险命令黑名单，**建连前拦截** |
+
+### 3. Auditability（可审计）
+
+记录（实现字段以代码为准，对外可查询）：
+
+- tool name
+- arguments（敏感字段脱敏）
+- permission result
+- execution status
+- duration
+- timestamp
+
+可通过 `get_audit_logs` 检索。
+
+---
+
+## Default Safe Mode
 
 ```env
 ENABLE_SECURITY=true
@@ -12,44 +53,73 @@ EXECUTE_TOOLS_ENABLED=false
 EXECUTE_PROTECTION_LEVEL=basic
 ```
 
-在此默认下：
+| 配置 | 含义 |
+|------|------|
+| `EXECUTE_TOOLS_ENABLED=false` | **默认**：只读运维 |
+| `EXECUTE_TOOLS_ENABLED=true` | 管理员授权后允许修改类操作 |
+| `EXECUTE_PROTECTION_LEVEL=strict` | 速率限制 + 高危确认 |
 
-- AI 可以巡检（健康、Docker 列表/日志、K8s 状态、SSH 连通性）
-- AI **不能**重启容器或执行远程命令
-- 后续开启执行模式时，仍会生效速率限制
+---
 
-## 三层安全体系
+## Real Case：Dangerous Command
 
-### 1. 权限控制
+**Input**
 
-- 模块白名单：`system`、`docker`、`kubernetes`、`ssh`
-- 操作分类：`READ` vs `EXECUTE`
-- 结构化拒绝原因，便于 Agent 与人工理解
+```text
+rm -rf /
+```
 
-### 2. 执行保护
+**Result**
+
+```text
+Blocked
+```
+
+**Remote execution**
+
+```text
+NO
+```
+
+系统行为：
+
+1. 进入 `ssh_execute_command`
+2. Dangerous Command Filter 命中黑名单
+3. **阻止执行**
+4. **不会发起任何 SSH 连接**
+5. 写入审计记录
+
+返回示例：
+
+```json
+{
+  "stdout": "",
+  "stderr": "命令包含危险操作 'rm -rf /'，已被安全模块拦截",
+  "status": "1"
+}
+```
+
+---
+
+## Component Detail
+
+### Permission Control
+
+- 模块白名单：`system` / `docker` / `kubernetes` / `ssh`
+- 操作分类：`READ_ONLY` vs `EXECUTE`
+- 结构化拒绝原因
+
+### Execute Protection
 
 | 等级 | 行为 |
 |------|------|
 | `off` | 仅权限校验 |
-| `basic` | 速率限制（默认 10 次/分钟） |
+| `basic` | 速率限制（默认） |
 | `strict` | 速率限制 + 高危确认 |
 
-### 3. 审计日志
+### Dangerous Command Filter
 
-每次 Tool 调用记录：
-
-- 时间戳
-- 工具名
-- 参数（权限层会对敏感字段脱敏）
-- 权限结果
-- 执行状态
-- 耗时
-
-可通过 MCP Tool 查询：`get_audit_logs`
-
-## 危险命令过滤（SSH）
-
-即使开启了执行模式，命中黑名单的命令也会在**建立任何 SSH 会话之前**被拦截。例如：
+示例黑名单片段：
 
 ```
 rm -rf /
@@ -61,29 +131,22 @@ reboot
 chmod -R 777 /
 ```
 
-示例返回：
+---
 
-```json
-{
-  "stdout": "",
-  "stderr": "命令包含危险操作 'rm -rf /'，已被安全模块拦截",
-  "status": "1"
-}
-```
+## Credential Handling
 
-## 凭证处理
+| Do | Don't |
+|----|-------|
+| Prefer SSH keys | Commit production passwords |
+| Use `YOUR_SERVER_IP` / `YOUR_USERNAME` in docs | Commit real public IPs |
+| Keep `.env` local | Commit tokens / private keys |
 
-| 建议 | 禁止 |
-|------|------|
-| 使用 SSH 密钥 | 把生产密码写进 `.env` |
-| 文档使用 `YOUR_SERVER_IP` 占位 | 提交真实云服务器 IP |
-| 必要时仅在调用时传入密码 | 提交 API Token / 私钥 |
-| `.env` 仅本地保存（已 gitignore） | 截图中暴露真实主机信息 |
+---
 
-## 生产检查清单
+## Production Checklist
 
-- [ ] 非必要保持 `EXECUTE_TOOLS_ENABLED=false`
-- [ ] 生产执行模式优先使用 `strict`
-- [ ] 轮换曾出现在聊天/截图中的任何凭证
-- [ ] 限制远程主机上的 SSH 用户权限
-- [ ] 定期查看 `get_audit_logs`
+- [ ] Keep `EXECUTE_TOOLS_ENABLED=false` until needed
+- [ ] Prefer `strict` in production execute mode
+- [ ] Rotate any leaked credentials
+- [ ] Least-privilege SSH users
+- [ ] Review `get_audit_logs` regularly
