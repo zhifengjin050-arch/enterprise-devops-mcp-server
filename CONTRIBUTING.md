@@ -4,6 +4,8 @@
 
 当前发布基线：**v1.0.1** · **225 tests passed** · **17 MCP Tools** · Enterprise Security Architecture。
 
+行为准则：[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。安全披露：[SECURITY.md](SECURITY.md)。
+
 ---
 
 ## 开发环境

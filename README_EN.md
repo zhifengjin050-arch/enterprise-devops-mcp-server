@@ -1,117 +1,91 @@
+<div align="center">
+
 # Enterprise DevOps MCP Server
 
-[中文](README.md) | **English**
+**MCP server for governed AI Agent tool calling over Linux, Docker, Kubernetes, and SSH.**
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/tests-225%20passed-brightgreen.svg)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions/workflows/test.yml)
-[![CI](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions/workflows/test.yml/badge.svg)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions/workflows/test.yml)
-[![MCP](https://img.shields.io/badge/MCP-compatible-8A2BE2.svg)](https://modelcontextprotocol.io/)
-[![Release](https://img.shields.io/github/v/release/zhifengjin050-arch/enterprise-devops-mcp-server)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/releases/tag/v1.0.1)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+Give agents a path to automate infrastructure — not an unrestricted shell.
 
-**Enterprise AI DevOps MCP Server for secure infrastructure automation with MCP, Docker, Kubernetes and SSH.**
+[中文](README.md) · [Architecture](docs/architecture.en.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
-Give AI Agents a governed path to operate infrastructure — not an unrestricted shell.
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
+[![Tests](https://img.shields.io/badge/tests-225%20passed-brightgreen)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions)
+[![MCP](https://img.shields.io/badge/MCP-17_tools-8A2BE2)]()
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-> **AI Agent → MCP Server → Security Layer → Infrastructure**
+</div>
 
-[Architecture](docs/architecture.en.md) · [Security](docs/security.en.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Release v1.0.1](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/releases/tag/v1.0.1)
+> **AI Agent → MCP Protocol → Security Layer → Infrastructure**
 
 ---
 
-## Why This Project
+## Positioning
 
-### Traditional ops
+Enterprise AIOps building block. Cursor, Claude, or any MCP client calls **17 tools** through RBAC, execute protection, command filtering, and audit logging.
 
-- Engineers run SSH commands by hand
-- Privileges are hard to bound once a shell is exposed
-- Changes often leave weak or missing audit trails
-
-```
-Engineer → SSH → Manual Command
-```
-
-### AI DevOps with this server
-
-```
-AI Agent
-   ↓
-MCP Tool
-   ↓
-Security Layer
-   ↓
-Infrastructure
-```
-
-The model never “owns” the host. Every call goes through permission checks, execute protection, command filtering, and audit logging.
+Default: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
 ## Features
 
-| Feature | Status |
-|---------|--------|
-| Linux Monitoring | ✅ |
-| Docker Management | ✅ |
-| Kubernetes | ✅ |
-| SSH Automation | ✅ |
-| Permission Control | ✅ |
-| Execute Protection | ✅ |
-| Audit Logging | ✅ |
-| Docker Deployment | ✅ |
-| GitHub Actions CI | ✅ |
-
-**17 MCP tools** across System, Docker, Kubernetes, and SSH.
+Linux monitoring · Docker · Kubernetes reads · SSH · permission control · execute gate · audit · Docker Compose · CI
 
 ---
 
-## Security
+## MCP tool catalog
 
-Safe by default:
-
-```env
-EXECUTE_TOOLS_ENABLED=false
-```
-
-- **ReadOnly / Execute separation**
-- **Execute disabled unless an admin opts in**
-- **Dangerous command filtering** (blocked before SSH connect)
-- **Audit trail** for tool calls
-
-Example:
-
-```
-rm -rf /
-   ↓
-Blocked by the security module
-(no remote SSH session is opened)
-```
-
-Details: [docs/security.en.md](docs/security.en.md)
+| Tool | Category | Risk | Permission |
+|------|----------|------|------------|
+| `get_server_health` | system | safe | viewer |
+| `get_system_info` | system | safe | viewer |
+| `get_cpu_usage` | system | safe | viewer |
+| `get_memory_usage` | system | safe | viewer |
+| `get_disk_usage` | system | safe | viewer |
+| `list_processes` | system | safe | viewer |
+| `get_audit_logs` | system | moderate | admin |
+| `docker_list` | docker | safe | viewer |
+| `docker_logs` | docker | safe | viewer |
+| `docker_restart` | docker | dangerous | admin |
+| `k8s_get_pods` | kubernetes | safe | viewer |
+| `k8s_get_deployments` | kubernetes | safe | viewer |
+| `k8s_get_services` | kubernetes | safe | viewer |
+| `k8s_logs` | kubernetes | safe | viewer |
+| `ssh_check_connection` | ssh | safe | viewer |
+| `ssh_execute_command` | ssh | dangerous | admin |
+| `ssh_upload_file` | ssh | dangerous | admin |
 
 ---
 
 ## Architecture
 
-```
-                 AI Agent
-                    |
-              MCP Protocol
-                    |
-        Enterprise DevOps MCP Server
-                    |
- ------------------------------------------------
- |              |              |                |
-System        Docker       Kubernetes        SSH
-                    |
-              Security Layer
+<img src="docs/images/architecture.png" alt="MCP architecture" width="100%" />
+
+```mermaid
+flowchart TB
+    Client[Cursor / Claude / AI Agent]
+    Client --> MCP[MCP Protocol]
+    MCP --> Server[Enterprise DevOps MCP Server]
+    Server --> Sec[Security Layer]
+    Sec --> Sys[Linux]
+    Sec --> Dock[Docker]
+    Sec --> K8s[Kubernetes]
+    Sec --> SSH[SSH]
 ```
 
 ---
 
 ## Screenshots
 
-See the gallery in the [Chinese README](README.md#screenshots) or [docs/screenshots](docs/screenshots/).
+| MCP tools | Cursor / Claude |
+|-----------|-----------------|
+| ![Tools](docs/images/mcp-tools.png) | ![Cursor MCP](docs/images/cursor-claude-mcp.png) |
+
+| Architecture |
+|--------------|
+| ![Architecture](docs/images/architecture.png) |
+
+The Cursor / Claude image is a **product preview**. Wire this repo into MCP to call tools from the IDE.
 
 ---
 
@@ -120,53 +94,37 @@ See the gallery in the [Chinese README](README.md#screenshots) or [docs/screensh
 ```bash
 git clone https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server.git
 cd enterprise-devops-mcp-server
-
-pip install -r requirements.txt
 cp .env.example .env
-
+pip install -r requirements.txt
 python -m app.server
 ```
 
-### Cursor MCP
-
-Replace `YOUR_PROJECT_PATH` with your local absolute path — never commit real machine paths:
-
-```json
-{
-  "mcpServers": {
-    "enterprise-devops": {
-      "command": "python",
-      "args": ["scripts/run_devops_mcp.py"],
-      "cwd": "YOUR_PROJECT_PATH",
-      "env": {
-        "FASTMCP_SHOW_SERVER_BANNER": "false",
-        "EXECUTE_TOOLS_ENABLED": "false"
-      }
-    }
-  }
-}
-```
-
-### Tests
-
 ```bash
+docker compose up -d --build
 pytest
 ```
 
-### Docker
-
-```bash
-docker compose up -d --build
-```
+Cursor snippet: [mcp_config_examples/cursor_mcp.json](mcp_config_examples/cursor_mcp.json)
 
 ---
 
-## Contributing
+## Deployment
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Keep `EXECUTE_TOOLS_ENABLED=false` as the default.
+Local: `python -m app.server`  
+Docker: `docker compose up -d --build`
+
+Do not enable execute tools in production without change control.
+
+---
+
+## Roadmap
+
+**v1.0.x (current):** 17 tools, security layer, audit, Docker, CI.
+
+Later: more clouds, policy packs, signed audit export.
 
 ---
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) · [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · [SECURITY.md](SECURITY.md) · [CHANGELOG.md](CHANGELOG.md)
