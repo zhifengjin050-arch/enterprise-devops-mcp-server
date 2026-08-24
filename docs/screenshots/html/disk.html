@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><title>Disk</title>
+<link rel="stylesheet" href="_shell.css"/>
+</head>
+<body class="app">
+<aside>
+  <div class="logo">DevOps MCP<small>get_disk_usage · safe</small></div>
+  <a>Tool catalog</a><a class="active">Linux</a><a>Security</a>
+</aside>
+<main>
+  <h1>get_disk_usage</h1>
+  <p class="sub">host=YOUR_SERVER_IP · read-only · no destructive cleanup unless execute gate is on</p>
+  <div class="card">
+    <table>
+      <tr><th>Mount</th><th>Used</th><th>Avail</th><th>Use%</th></tr>
+      <tr><td>/</td><td>42G</td><td>18G</td><td><span class="badge warn">70%</span></td></tr>
+      <tr><td>/var</td><td>28G</td><td>4G</td><td><span class="badge danger">88%</span></td></tr>
+      <tr><td>/home</td><td>6G</td><td>40G</td><td><span class="badge">13%</span></td></tr>
+    </table>
+  </div>
+  <p class="preview">Product preview — YOUR_SERVER_IP placeholder. Automation that deletes files stays behind the execute gate.</p>
+</main>
+</body></html>

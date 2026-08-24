@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><title>SSH filter</title>
+<link rel="stylesheet" href="_shell.css"/>
+</head>
+<body class="app">
+<aside><div class="logo">DevOps MCP</div><a class="active">Command filter</a></aside>
+<main>
+  <h1>SSH Security Filter</h1>
+  <p class="sub">blocked: rm -rf, shutdown, reboot, dd if, mkfs</p>
+  <div class="card">
+    <table>
+      <tr><th>Command</th><th>Result</th></tr>
+      <tr><td>uptime</td><td><span class="badge">allowed (read-only)</span></td></tr>
+      <tr><td>rm -rf /</td><td><span class="badge danger">blocked</span></td></tr>
+      <tr><td>ssh_execute_command</td><td><span class="badge warn">execute gate off</span></td></tr>
+    </table>
+  </div>
+  <p class="preview">Product preview — YOUR_USERNAME @ YOUR_SERVER_IP</p>
+</main>
+</body></html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><title>Cursor MCP</title>
+<link rel="stylesheet" href="_shell.css"/>
+<style>body{padding:32px 40px;background:#0b1220;color:#e2e8f0}</style>
+</head>
+<body>
+  <h1 style="color:#fff">Cursor / Claude MCP</h1>
+  <p class="sub" style="color:#94a3b8">Product preview — configure mcpServers.enterprise-devops with EXECUTE_TOOLS_ENABLED=false</p>
+  <div class="mono">"mcpServers": {
+  "enterprise-devops": {
+    "command": "python",
+    "args": ["scripts/run_devops_mcp.py"],
+    "cwd": "YOUR_PROJECT_PATH",
+    "env": { "EXECUTE_TOOLS_ENABLED": "false" }
+  }
+}</div>
+  <p class="preview">Never commit real API keys, kubeconfig, or SSH private keys.</p>
+</body></html>

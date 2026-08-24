@@ -113,8 +113,11 @@ git clone https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server.git
 cd enterprise-devops-mcp-server
 cp .env.example .env
 pip install -r requirements.txt
-python -m app.server
+python scripts/demo_list_tools.py
+./scripts/demo_start.sh          # Windows: .\scripts\demo_start.ps1
 ```
+
+Keep `EXECUTE_TOOLS_ENABLED=false`. See [demo/README.md](demo/README.md). Do not commit `.env`, kubeconfig, or SSH keys.
 
 ### Docker
 

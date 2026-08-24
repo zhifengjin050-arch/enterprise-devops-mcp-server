@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><title>MCP Tools</title>
+<link rel="stylesheet" href="_shell.css"/>
+</head>
+<body class="app">
+<aside>
+  <div class="logo">DevOps MCP<small>17 tools · read-only default</small></div>
+  <a class="active">Tool catalog</a><a>Security</a><a>Audit</a>
+</aside>
+<main>
+  <h1>MCP Tool Catalog</h1>
+  <p class="sub">EXECUTE_TOOLS_ENABLED=<strong>false</strong> · dangerous tools blocked until explicitly enabled</p>
+  <div class="card">
+    <table>
+      <tr><th>Tool</th><th>Category</th><th>Risk</th><th>Permission</th></tr>
+      <tr><td>get_server_health</td><td>system</td><td><span class="badge">safe</span></td><td>viewer</td></tr>
+      <tr><td>docker_list / docker_logs</td><td>docker</td><td><span class="badge">safe</span></td><td>viewer</td></tr>
+      <tr><td>k8s_get_pods / k8s_logs</td><td>kubernetes</td><td><span class="badge">safe</span></td><td>viewer</td></tr>
+      <tr><td>ssh_check_connection</td><td>ssh</td><td><span class="badge">safe</span></td><td>viewer</td></tr>
+      <tr><td>docker_restart</td><td>docker</td><td><span class="badge danger">dangerous</span></td><td>admin + execute gate</td></tr>
+      <tr><td>ssh_execute_command</td><td>ssh</td><td><span class="badge danger">dangerous</span></td><td>admin + execute gate</td></tr>
+    </table>
+  </div>
+  <p class="preview">Product preview — YOUR_SERVER_IP / YOUR_USERNAME placeholders only.</p>
+</main>
+</body></html>
