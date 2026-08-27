@@ -27,6 +27,14 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
+## Demo
+
+[![Demo video](docs/videos/cover.png)](docs/videos/demo.mp4)
+
+点击封面观看演示视频（中文旁白 + 底部字幕）。
+
+---
+
 ## Features
 
 | Feature | Status |

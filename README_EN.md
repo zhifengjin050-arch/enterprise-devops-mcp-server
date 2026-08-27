@@ -27,6 +27,14 @@ Default: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
+## Demo
+
+[![Demo video](docs/videos/cover.png)](docs/videos/demo.mp4)
+
+Click the cover to watch the walkthrough (Chinese narration + subtitles).
+
+---
+
 ## Features
 
 Linux monitoring · Docker · Kubernetes reads · SSH · permission control · execute gate · audit · Docker Compose · CI
