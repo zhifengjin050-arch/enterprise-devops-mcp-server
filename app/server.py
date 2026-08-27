@@ -54,6 +54,7 @@ def init_security() -> None:
     logger.info("  执行保护等级: %s", protector.level.value)
     logger.info("  速率限制: %d 次/分钟", protector.max_calls_per_minute)
     logger.info("  安全模式: %s", "已启用" if settings.enable_security else "已禁用")
+    logger.info("  传输: stdio（信任能拉起本进程的调用方；API_KEY 预留给 HTTP 封装）")
 
 
 def init_server() -> FastMCP:

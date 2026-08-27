@@ -28,6 +28,9 @@ TOOL_METADATA: dict[str, ToolMetadata] = {
     "get_disk_usage": ToolMetadata("get_disk_usage", "磁盘使用率", "system", "safe", "devops.viewer", False),
     "get_audit_logs": ToolMetadata("get_audit_logs", "审计日志", "system", "moderate", "devops.admin", True),
     "list_processes": ToolMetadata("list_processes", "进程列表", "system", "safe", "devops.viewer", False),
+    "confirm_execute_action": ToolMetadata(
+        "confirm_execute_action", "确认高危执行", "system", "moderate", "devops.viewer", True
+    ),
     "docker_list": ToolMetadata("docker_list", "容器列表", "docker", "safe", "devops.viewer", False),
     "docker_logs": ToolMetadata("docker_logs", "容器日志", "docker", "safe", "devops.viewer", False),
     "docker_restart": ToolMetadata("docker_restart", "重启容器", "docker", "dangerous", "devops.admin", True),

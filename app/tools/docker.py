@@ -140,6 +140,7 @@ def docker_logs(
     异常时返回 {"status": "error", "message": "..."}
     """
     logger.info("Tool 调用: docker_logs (container=%s, lines=%d)", container_name, lines)
+    lines = max(1, min(int(lines or 100), 1000))
     try:
         client = _get_docker_client()
         container = client.containers.get(container_name)

@@ -257,6 +257,7 @@ def k8s_logs(
         "Tool 调用: k8s_logs (pod=%s, namespace=%s, lines=%d)",
         pod_name, namespace, lines,
     )
+    lines = max(1, min(int(lines or 100), 1000))
     ns = _safe_get_namespace(namespace)
 
     try:
@@ -336,9 +337,9 @@ def _get_k8s_error_message(error: Exception) -> str:
             "可通过 K8S_KUBECONFIG_PATH 环境变量指定。"
         )
     if "connection" in error_str or "refused" in error_str or "timeout" in error_str:
-        return f"Kubernetes 集群连接失败: {error}"
+        return "Kubernetes 集群连接失败"
 
-    return f"Kubernetes 操作失败: {error}"
+    return "Kubernetes 操作失败"
 
 
 def register_kubernetes_tools(mcp: FastMCP) -> None:

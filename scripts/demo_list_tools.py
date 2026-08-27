@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""List 17 MCP tools and the read-only execute gate. No network, no secrets."""
+"""List MCP tools and the read-only execute gate. No network, no secrets."""
 from __future__ import annotations
 
 import os

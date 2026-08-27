@@ -28,8 +28,8 @@ class TestSystemTools:
         tool_manager = getattr(mcp_server._mcp_server, "_tool_manager", None)
         if tool_manager:
             tools = getattr(tool_manager, "_tools", {})
-            assert len(tools) == 7, (
-                f"System 模块应注册 7 个 Tool，实际: {len(tools)}"
+            assert len(tools) == 8, (
+                f"System 模块应注册 8 个 Tool，实际: {len(tools)}"
             )
 
     def test_health_tool_registered(self, mcp_server: FastMCP) -> None:

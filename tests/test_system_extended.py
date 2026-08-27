@@ -259,6 +259,27 @@ class TestGetAuditLogs:
             assert result["status"] == "error"
 
 
+class TestConfirmExecuteAction:
+    def test_rejects_unknown_tool(self) -> None:
+        from app.tools.system import confirm_execute_action
+
+        result = confirm_execute_action(tool_name="not_a_tool")
+        assert result["status"] == "error"
+
+    def test_confirms_known_tool(self) -> None:
+        from app.security.execute_protection import ProtectionLevel, get_execute_protector
+        from app.tools.system import confirm_execute_action
+
+        protector = get_execute_protector()
+        protector.level = ProtectionLevel.STRICT
+        protector.reset_confirmation()
+        result = confirm_execute_action(tool_name="docker_restart")
+        assert result["status"] == "success"
+        assert protector.require_confirmation("docker_restart") is True
+        protector.reset_confirmation()
+        protector.level = ProtectionLevel.BASIC
+
+
 class TestRegistration:
     """注册完整性测试。"""
 
@@ -280,4 +301,5 @@ class TestRegistration:
         assert "get_disk_usage" in names
         assert "get_audit_logs" in names
         assert "list_processes" in names
-        assert len(tools) == 7
+        assert "confirm_execute_action" in names
+        assert len(tools) == 8

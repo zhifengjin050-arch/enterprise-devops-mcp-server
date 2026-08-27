@@ -33,11 +33,9 @@ COPY .env.example .env.example
 COPY mcp_config_examples/ ./mcp_config_examples/
 COPY scripts/ ./scripts/
 
-# stdio MCP 无 HTTP /health；用模块导入探活，避免伪健康检查
+# stdio MCP 无 HTTP 端口；用模块导入探活
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "from app.config import settings; assert settings.mcp_server_name" || exit 1
-
-EXPOSE 8000
 
 ENV ENABLE_SECURITY=true \
     EXECUTE_TOOLS_ENABLED=false \

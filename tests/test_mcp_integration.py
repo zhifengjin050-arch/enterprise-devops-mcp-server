@@ -86,10 +86,10 @@ class TestToolRegistration:
 
     @pytest.mark.asyncio
     async def test_tool_count(self, server: FastMCP) -> None:
-        """验证 Tool 总数正确（7 system + 3 docker + 4 k8s + 3 ssh_realtime = 17）。"""
+        """验证 Tool 总数正确（8 system + 3 docker + 4 k8s + 3 ssh = 18）。"""
         tools = await server.list_tools()
-        assert len(tools) == 17, (
-            f"期望 17 个 Tool，实际: {len(tools)}"
+        assert len(tools) == 18, (
+            f"期望 18 个 Tool，实际: {len(tools)}"
         )
 
     @pytest.mark.asyncio

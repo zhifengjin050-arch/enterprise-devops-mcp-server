@@ -49,6 +49,12 @@ DANGEROUS_COMMANDS = [
 ]
 
 
+def _safe_tool_error(prefix: str, exc: Exception) -> str:
+    """记录完整异常，向调用方只返回稳定前缀，避免泄露内部细节。"""
+    logger.error("%s: %s", prefix, exc)
+    return prefix
+
+
 def _validate_command(command: str) -> str | None:
     """校验命令安全性，检查是否包含危险操作。
 
@@ -60,13 +66,20 @@ def _validate_command(command: str) -> str | None:
     """
     command_stripped = command.strip().lower()
 
-    # 检查黑名单前缀
-    for dangerous in DANGEROUS_COMMANDS:
+    extra_blocked = (
+        "| bash",
+        "|bash",
+        "| sh",
+        "|sh",
+        "| python",
+        "|python",
+        "chmod -r 777 /",
+    )
+    for dangerous in (*DANGEROUS_COMMANDS, *extra_blocked):
         if dangerous.lower() in command_stripped:
             logger.warning("危险命令拦截: '%s' 匹配黑名单 '%s'", command, dangerous)
             return f"命令包含危险操作 '{dangerous}'，已被安全模块拦截"
 
-    # 检查配置中的 blocked_commands
     if not get_permission_manager().check_command(command):
         return "命令已被安全策略拦截"
 
@@ -99,6 +112,21 @@ def _validate_path(path_str: str) -> str | None:
     return None
 
 
+def _sensitive_local_path(path_str: str) -> str | None:
+    """拦截本机密钥、配置等敏感路径，避免 MCP 主机文件被上传。"""
+    try:
+        path = Path(path_str)
+    except Exception:
+        return f"无效的文件路径: {path_str}"
+    parts = {part.lower() for part in path.parts}
+    if ".ssh" in parts or ".gnupg" in parts:
+        return "禁止上传来自敏感目录的文件"
+    name = path.name.lower()
+    if name in {".env", "id_rsa", "id_ed25519", "id_ecdsa", "id_dsa", ".netrc"}:
+        return "禁止上传敏感文件"
+    return None
+
+
 def _get_ssh_client(
     host: str,
     username: str,
@@ -126,15 +154,28 @@ def _get_ssh_client(
     timeout = timeout or settings.ssh_default_timeout
 
     client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    policy = (settings.ssh_host_key_policy or "auto").strip().lower()
+    if policy == "reject":
+        client.load_system_host_keys()
+        known = Path.home() / ".ssh" / "known_hosts"
+        if known.is_file():
+            try:
+                client.load_host_keys(str(known))
+            except Exception:
+                logger.warning("无法加载 known_hosts: %s", known)
+        client.set_missing_host_key_policy(paramiko.RejectPolicy())
+    else:
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    use_password = bool(password)
     client.connect(
         hostname=host,
         port=port,
         username=username,
         password=password,
         timeout=timeout,
-        allow_agent=False,  # 避免弹出 agent 认证窗口
-        look_for_keys=False,  # 防止意外密钥加载
+        allow_agent=not use_password,
+        look_for_keys=not use_password,
     )
     return client
 
@@ -177,11 +218,10 @@ def ssh_check_connection(
         }
     except Exception as e:
         elapsed_ms = int((time.time() - start) * 1000)
-        logger.error("SSH 连接失败 (host=%s): %s", host, e)
         return {
             "status": "error",
             "host": host,
-            "message": f"SSH 连接失败: {e}",
+            "message": _safe_tool_error("SSH 连接失败", e),
             "latency_ms": str(elapsed_ms),
         }
 
@@ -232,7 +272,7 @@ def ssh_execute_command(
         }
 
     try:
-        client = _get_ssh_client(host=host, username=username, port=port)
+        client = _get_ssh_client(host=host, username=username, port=port, password=password)
         stdin, stdout, stderr = client.exec_command(command, timeout=30)
         exit_code = stdout.channel.recv_exit_status()
 
@@ -247,10 +287,9 @@ def ssh_execute_command(
             "status": str(exit_code),
         }
     except Exception as e:
-        logger.error("SSH 命令执行失败 (host=%s): %s", host, e)
         return {
             "stdout": "",
-            "stderr": f"SSH 命令执行失败: {e}",
+            "stderr": _safe_tool_error("SSH 命令执行失败", e),
             "status": "1",
         }
 
@@ -262,6 +301,7 @@ def ssh_upload_file(
     local_path: Annotated[str, "本地文件绝对路径"],
     remote_path: Annotated[str, "远程目标绝对路径"],
     port: Annotated[int, "SSH 端口，默认 22"] = 22,
+    password: Annotated[str | None, "SSH 密码（可选）"] = None,
 ) -> dict[str, str]:
     """安全上传文件到远程服务器。
 
@@ -290,6 +330,10 @@ def ssh_upload_file(
     if local_err:
         return {"status": "error", "message": local_err}
 
+    sensitive_err = _sensitive_local_path(local_path)
+    if sensitive_err:
+        return {"status": "error", "message": sensitive_err}
+
     remote_err = _validate_path(remote_path)
     if remote_err:
         return {"status": "error", "message": remote_err}
@@ -302,8 +346,16 @@ def ssh_upload_file(
     if not local_file.is_file():
         return {"status": "error", "message": f"路径不是文件: {local_path}"}
 
+    max_bytes = max(1, int(settings.ssh_upload_max_bytes or 10 * 1024 * 1024))
     try:
-        client = _get_ssh_client(host=host, username=username, port=port)
+        size = local_file.stat().st_size
+    except OSError as e:
+        return {"status": "error", "message": _safe_tool_error("无法读取本地文件", e)}
+    if size > max_bytes:
+        return {"status": "error", "message": f"本地文件超过大小上限 {max_bytes} 字节"}
+
+    try:
+        client = _get_ssh_client(host=host, username=username, port=port, password=password)
         sftp = client.open_sftp()
         sftp.put(local_path, remote_path)
         sftp.close()
@@ -316,8 +368,7 @@ def ssh_upload_file(
             "remote_path": remote_path,
         }
     except Exception as e:
-        logger.error("SSH 文件上传失败 (host=%s): %s", host, e)
-        return {"status": "error", "message": f"SSH 文件上传失败: {e}"}
+        return {"status": "error", "message": _safe_tool_error("SSH 文件上传失败", e)}
 
 
 def register_ssh_tools(mcp: FastMCP) -> None:

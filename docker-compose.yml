@@ -16,10 +16,10 @@ services:
       dockerfile: Dockerfile
       target: production
     container_name: enterprise-devops-mcp-server
-    # Production default: docker compose up -d
-    # (no profile required so plain `up` works)
-    ports:
-      - "8000:8000"
+    # stdio MCP 不提供 HTTP；不要占用 8000（与项目 1/3 后端冲突）
+    # 若自行加了 HTTP 包装，再取消下面注释：
+    # ports:
+    #   - "8000:8000"
     environment:
       - MCP_SERVER_NAME=Enterprise DevOps MCP Server
       - MCP_SERVER_VERSION=1.0.1

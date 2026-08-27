@@ -2,7 +2,7 @@
 
 感谢你对 **Enterprise DevOps MCP Server** 的关注。欢迎提交 Issue 与 Pull Request。
 
-当前发布基线：**v1.0.1** · **225 tests passed** · **17 MCP Tools** · Enterprise Security Architecture。
+当前发布基线：**v1.0.1** · **230 tests passed** · **18 MCP Tools** · Enterprise Security Architecture。
 
 行为准则：[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。安全披露：[SECURITY.md](SECURITY.md)。
 
@@ -48,7 +48,7 @@ pytest
 python -m pytest tests/ -v
 ```
 
-提交前请确保本地测试通过（当前发布基线：**225+ passed**）。
+提交前请确保本地测试通过（当前发布基线：**230+ passed**）。
 
 Docker 测试 profile：
 

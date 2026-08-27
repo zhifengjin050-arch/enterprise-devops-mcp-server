@@ -9,8 +9,8 @@
 [English](README_EN.md) · [Architecture](docs/architecture.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
-[![Tests](https://img.shields.io/badge/tests-225%20passed-brightgreen)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions)
-[![MCP](https://img.shields.io/badge/MCP-17_tools-8A2BE2)]()
+[![Tests](https://img.shields.io/badge/tests-230%20passed-brightgreen)](https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server/actions)
+[![MCP](https://img.shields.io/badge/MCP-18_tools-8A2BE2)]()
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 </div>
@@ -21,7 +21,7 @@
 
 ## Positioning
 
-Enterprise AIOps building block: Cursor / Claude / any MCP client calls **17 tools** through permission control, execute protection, command filtering, and audit logging.
+Enterprise AIOps building block: Cursor / Claude / any MCP client calls **18 tools** through module whitelist, execute protection, command filtering, and audit logging.
 
 Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
@@ -53,6 +53,7 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 | `get_memory_usage` | system | safe | viewer |
 | `get_disk_usage` | system | safe | viewer |
 | `list_processes` | system | safe | viewer |
+| `confirm_execute_action` | system | moderate | viewer |
 | `get_audit_logs` | system | moderate | admin |
 | `docker_list` | docker | safe | viewer |
 | `docker_logs` | docker | safe | viewer |
@@ -82,7 +83,7 @@ flowchart TB
     Sec --> K8s[Kubernetes]
     Sec --> SSH[SSH]
     subgraph sec [Controls]
-      P[RBAC]
+      P[Module ACL]
       E[Execute gate]
       F[Command filter]
       A[Audit log]
@@ -163,7 +164,7 @@ Never enable execute tools in production without an explicit change-control proc
 
 ## Roadmap
 
-**v1.0.x (current):** 17 tools, security layer, audit, Docker, CI.
+**v1.0.x (current):** 18 tools, security layer, audit, Docker, CI.
 
 Later: more cloud providers, finer-grained policy packs, signed audit export.
 

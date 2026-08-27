@@ -342,7 +342,31 @@ def get_audit_logs(
         }
     except Exception as e:
         logger.error("审计日志获取失败: %s", e)
-        return {"status": "error", "message": f"获取审计日志失败: {e}"}
+        return {"status": "error", "message": "获取审计日志失败"}
+
+
+_EXECUTE_CONFIRM_TOOLS = {
+    "docker_restart",
+    "ssh_execute_command",
+    "ssh_upload_file",
+}
+
+
+@require_permission("system")
+def confirm_execute_action(
+    tool_name: Annotated[str, "要确认的执行类工具名"],
+) -> dict[str, str]:
+    """STRICT 模式下确认高危执行工具。"""
+    name = (tool_name or "").strip()
+    if name not in _EXECUTE_CONFIRM_TOOLS:
+        return {
+            "status": "error",
+            "message": "只能确认 docker_restart / ssh_execute_command / ssh_upload_file",
+        }
+    from app.security.execute_protection import get_execute_protector
+
+    get_execute_protector().confirm_action(name)
+    return {"status": "success", "tool_name": name}
 
 
 @require_permission("system")
@@ -436,6 +460,18 @@ def register_system_tools(mcp: FastMCP) -> None:
     ) -> dict[str, Any]:
         """获取审计日志记录。"""
         return get_audit_logs(count=count, tool_name=tool_name, status=status)
+
+    @mcp.tool(
+        name="confirm_execute_action",
+        description="在 EXECUTE_PROTECTION_LEVEL=strict 时，确认即将执行的高危工具。"
+        "tool_name 必须是 docker_restart / ssh_execute_command / ssh_upload_file 之一。"
+        "确认后该工具在本进程内可执行一次策略下的后续调用。",
+    )
+    def _confirm_wrapper(
+        tool_name: Annotated[str, "要确认的执行类工具名"],
+    ) -> dict[str, str]:
+        """确认高危执行操作。"""
+        return confirm_execute_action(tool_name=tool_name)
 
     @mcp.tool(
         name="list_processes",

@@ -51,6 +51,10 @@ class Settings(BaseSettings):
     # ---- SSH 默认配置 ----
     ssh_default_port: int = 22
     ssh_default_timeout: int = 30
+    ssh_host_key_policy: str = "auto"
+    """auto = AutoAddPolicy（演示默认）；reject = 仅信任 known_hosts。"""
+    ssh_upload_max_bytes: int = 10 * 1024 * 1024
+    """ssh_upload_file 本地文件大小上限。"""
 
     ssh_servers: str = ""
     """
