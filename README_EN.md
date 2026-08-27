@@ -29,10 +29,6 @@ Default: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ## Demo
 
-<video controls playsinline width="100%" poster="docs/videos/cover.png" preload="metadata">
-  <source src="https://cdn.jsdelivr.net/gh/zhifengjin050-arch/enterprise-devops-mcp-server@main/docs/videos/demo.mp4" type="video/mp4" />
-</video>
-
 [![Demo video](docs/videos/cover.png)](https://zhifengjin050-arch.github.io/enterprise-devops-mcp-server/)
 
 Click the cover to watch the walkthrough (Chinese narration + subtitles). GitHub file pages do not play repo mp4s, so the player is hosted on GitHub Pages.
