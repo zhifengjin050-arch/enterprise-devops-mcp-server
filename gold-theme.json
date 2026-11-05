@@ -7,57 +7,68 @@
     {
       "id": "section-01",
       "title": "工程导读 · 从场景到实现",
-      "caption": "01 / PROJECT DOCUMENTATION"
+      "caption": "01 / PROJECT DOCUMENTATION",
+      "icon": "guide"
     },
     {
       "id": "section-02",
       "title": "Positioning",
-      "caption": "02 / PROJECT DOCUMENTATION"
+      "caption": "02 / PROJECT DOCUMENTATION",
+      "icon": "features"
     },
     {
       "id": "section-03",
       "title": "Demo",
-      "caption": "03 / PROJECT DOCUMENTATION"
+      "caption": "03 / PROJECT DOCUMENTATION",
+      "icon": "start"
     },
     {
       "id": "section-04",
       "title": "Features",
-      "caption": "04 / PROJECT DOCUMENTATION"
+      "caption": "04 / PROJECT DOCUMENTATION",
+      "icon": "features"
     },
     {
       "id": "section-05",
       "title": "MCP tool catalog",
-      "caption": "05 / PROJECT DOCUMENTATION"
+      "caption": "05 / PROJECT DOCUMENTATION",
+      "icon": "features"
     },
     {
       "id": "section-06",
       "title": "Architecture",
-      "caption": "06 / PROJECT DOCUMENTATION"
+      "caption": "06 / PROJECT DOCUMENTATION",
+      "icon": "architecture"
     },
     {
       "id": "section-07",
       "title": "Screenshots",
-      "caption": "07 / PROJECT DOCUMENTATION"
+      "caption": "07 / PROJECT DOCUMENTATION",
+      "icon": "preview"
     },
     {
       "id": "section-08",
       "title": "Quick Start",
-      "caption": "08 / PROJECT DOCUMENTATION"
+      "caption": "08 / PROJECT DOCUMENTATION",
+      "icon": "start"
     },
     {
       "id": "section-09",
       "title": "Deployment",
-      "caption": "09 / PROJECT DOCUMENTATION"
+      "caption": "09 / PROJECT DOCUMENTATION",
+      "icon": "deploy"
     },
     {
       "id": "section-10",
       "title": "Roadmap",
-      "caption": "10 / PROJECT DOCUMENTATION"
+      "caption": "10 / PROJECT DOCUMENTATION",
+      "icon": "roadmap"
     },
     {
       "id": "section-11",
       "title": "License",
-      "caption": "11 / PROJECT DOCUMENTATION"
+      "caption": "11 / PROJECT DOCUMENTATION",
+      "icon": "license"
     }
   ]
 }
