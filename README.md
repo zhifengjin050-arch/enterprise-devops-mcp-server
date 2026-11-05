@@ -15,6 +15,30 @@
 
 </div>
 
+<!-- engineering-guide:start -->
+## 🧭 工程导读 · 从场景到实现
+
+**具有执行边界的运维工具层**。将 Linux、Docker、Kubernetes 和 SSH 操作封装为 MCP 工具，使客户端可以发现工具，并理解其权限与风险。
+
+```mermaid
+flowchart LR
+  N0["MCP 客户端"]
+  N1["工具元数据"]
+  N2["权限与执行门"]
+  N3["基础设施操作"]
+  N4["审计记录"]
+  N0 --> N1 --> N2 --> N3 --> N4
+```
+
+- 工具目录同时描述类别、风险和所需权限，便于客户端选择工具及开发者审查能力。
+- EXECUTE_TOOLS_ENABLED 默认关闭；模块许可、参数或命令检查与审计需要结合实际入口阅读。
+- 协议接入和底层执行分离：先验证工具枚举，再逐步接入容器、集群或 SSH 环境。
+
+📖 **[阅读完整工程导读](docs/PROJECT_GUIDE.md)**：源码路径、最短运行路线、演示验收与当前边界。
+<!-- engineering-guide:end -->
+
+
+
 > **AI Agent → MCP Protocol → Security Layer → Infrastructure**
 
 ---
