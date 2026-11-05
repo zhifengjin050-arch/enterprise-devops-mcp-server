@@ -1,3 +1,5 @@
+<picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/hero-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/hero-light.svg"><img src="docs/showcase/hero-light.svg" alt="Enterprise DevOps MCP Server · 有执行边界的基础设施工具层" width="100%"></picture>
+
 <div align="center">
 
 # Enterprise DevOps MCP Server
@@ -16,7 +18,9 @@
 </div>
 
 <!-- engineering-guide:start -->
-## 🧭 工程导读 · 从场景到实现
+<a id="-工程导读--从场景到实现"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-01-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-01-light.svg"><img src="docs/showcase/section-01-light.svg" alt="工程导读 · 从场景到实现" width="100%"></picture></h2>
+
 
 **具有执行边界的运维工具层**。将 Linux、Docker、Kubernetes 和 SSH 操作封装为 MCP 工具，使客户端可以发现工具，并理解其权限与风险。
 
@@ -43,7 +47,9 @@ flowchart LR
 
 ---
 
-## Positioning
+<a id="positioning"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-02-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-02-light.svg"><img src="docs/showcase/section-02-light.svg" alt="Positioning" width="100%"></picture></h2>
+
 
 Enterprise AIOps building block: Cursor / Claude / any MCP client calls **18 tools** through module whitelist, execute protection, command filtering, and audit logging.
 
@@ -51,7 +57,9 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
-## Demo
+<a id="demo"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-03-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-03-light.svg"><img src="docs/showcase/section-03-light.svg" alt="Demo" width="100%"></picture></h2>
+
 
 [![Demo video](docs/videos/cover.png)](https://zhifengjin050-arch.github.io/enterprise-devops-mcp-server/)
 
@@ -59,7 +67,9 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
-## Features
+<a id="features"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-04-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-04-light.svg"><img src="docs/showcase/section-04-light.svg" alt="Features" width="100%"></picture></h2>
+
 
 | Feature | Status |
 |---------|--------|
@@ -75,7 +85,9 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
-## MCP tool catalog
+<a id="mcp-tool-catalog"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-05-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-05-light.svg"><img src="docs/showcase/section-05-light.svg" alt="MCP tool catalog" width="100%"></picture></h2>
+
 
 | Tool | Category | Risk | Permission |
 |------|----------|------|------------|
@@ -100,7 +112,9 @@ Default posture: **read-only** (`EXECUTE_TOOLS_ENABLED=false`).
 
 ---
 
-## Architecture
+<a id="architecture"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-06-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-06-light.svg"><img src="docs/showcase/section-06-light.svg" alt="Architecture" width="100%"></picture></h2>
+
 
 <img src="docs/images/architecture.png" alt="MCP architecture" width="100%" />
 
@@ -125,7 +139,9 @@ flowchart TB
 
 ---
 
-## Screenshots
+<a id="screenshots"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-07-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-07-light.svg"><img src="docs/showcase/section-07-light.svg" alt="Screenshots" width="100%"></picture></h2>
+
 
 | MCP tools | Cursor / Claude |
 |-----------|-----------------|
@@ -139,7 +155,9 @@ Cursor / Claude 图为 **Product Preview**（能力示意）。将本仓库配�
 
 ---
 
-## Quick Start
+<a id="quick-start"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-08-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-08-light.svg"><img src="docs/showcase/section-08-light.svg" alt="Quick Start" width="100%"></picture></h2>
+
 
 ```bash
 git clone https://github.com/zhifengjin050-arch/enterprise-devops-mcp-server.git
@@ -183,7 +201,9 @@ pytest
 
 ---
 
-## Deployment
+<a id="deployment"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-09-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-09-light.svg"><img src="docs/showcase/section-09-light.svg" alt="Deployment" width="100%"></picture></h2>
+
 
 | Mode | Command |
 |------|---------|
@@ -194,7 +214,9 @@ Never enable execute tools in production without an explicit change-control proc
 
 ---
 
-## Roadmap
+<a id="roadmap"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-10-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-10-light.svg"><img src="docs/showcase/section-10-light.svg" alt="Roadmap" width="100%"></picture></h2>
+
 
 **v1.0.x (current):** 18 tools, security layer, audit, Docker, CI.
 
@@ -202,7 +224,9 @@ Later: more cloud providers, finer-grained policy packs, signed audit export.
 
 ---
 
-## License
+<a id="license"></a>
+<h2><picture><source media="(prefers-color-scheme: dark)" srcset="docs/showcase/section-11-dark.svg"><source media="(prefers-color-scheme: light)" srcset="docs/showcase/section-11-light.svg"><img src="docs/showcase/section-11-light.svg" alt="License" width="100%"></picture></h2>
+
 
 [MIT](LICENSE)
 
